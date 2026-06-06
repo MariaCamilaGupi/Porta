@@ -1,1106 +1,508 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chef Privado — App Mockup</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Porta — Flujo de UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    :root {
+      --sage-50: #f0f5ef;
+      --sage-100: #deecd9;
+      --sage-200: #c4dbbe;
+      --sage-300: #a3c69a;
+      --mint-50: #eaf6f1;
+      --mint-100: #d0ede4;
+      --mint-200: #a8d9c8;
+      --forest: #1f4a2e;
+      --forest-light: #2d6140;
+      --forest-deep: #162d1e;
+      --leaf: #3a7d44;
+      --text-dark: #1a2e1c;
+      --text-mid: #3d5c42;
+      --text-muted: #6b8f72;
+      --text-light: #9ab8a0;
+      --card-bg: #f7faf6;
+      --chip-bg: #e4f0e2;
+    }
 
-  :root {
-    --gold: #C9A96E;
-    --gold-light: #E8C97A;
-    --gold-dark: #8B6010;
-    --dark: #1C1007;
-    --dark2: #231508;
-    --dark3: #2A1C08;
-    --cream: #FDFAF5;
-    --text-main: #2C1A06;
-    --text-sub: #7A6040;
-    --text-gold-faint: rgba(201,169,110,0.5);
-    --border-gold: rgba(201,169,110,0.2);
-  }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
+    body { background: #f0f5ef; }
 
-  body {
-    background: #F5F0E8;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 24px 16px 48px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  }
+    .flow-wrap { padding: 32px 24px; min-height: 100vh; }
+    .flow-title { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--forest-deep); margin-bottom: 6px; }
+    .flow-sub { font-size: 12px; color: var(--text-muted); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 28px; }
 
-  /* ── PAGE HEADER ─────────────────────────────────────────── */
-  .page-header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .page-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-main);
-    letter-spacing: -0.3px;
-  }
-  .page-sub {
-    font-size: 13px;
-    color: var(--text-sub);
-    margin-top: 4px;
-  }
+    .screens-label { display: flex; gap: 20px; padding: 0 0 8px; overflow-x: auto; scrollbar-width: none; }
+    .screens-label::-webkit-scrollbar { display: none; }
+    .slabel { flex: 0 0 240px; text-align: center; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; font-weight: 500; }
 
-  /* ── PHONE FRAME ─────────────────────────────────────────── */
-  .phone-wrap { display: flex; justify-content: center; }
-  .phone {
-    width: 340px;
-    background: var(--cream);
-    border-radius: 36px;
-    border: 2.5px solid var(--gold);
-    overflow: hidden;
-    position: relative;
-    outline: 6px solid #1a1209;
-    outline-offset: 0;
-    /* Fixed height with internal scroll handled per-screen */
-  }
+    .phone-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+    .phone-row::-webkit-scrollbar { display: none; }
 
-  /* ── STATUS BAR ──────────────────────────────────────────── */
-  .sb {
-    height: 30px; background: var(--dark);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 18px; flex-shrink: 0;
-  }
-  .sb-t { color: var(--gold-light); font-size: 11px; font-weight: 500; }
-  .sb-ic { color: var(--gold-light); font-size: 12px; display: flex; gap: 5px; align-items: center; }
+    .phone {
+      flex: 0 0 240px;
+      height: 480px;
+      border-radius: 36px;
+      overflow: hidden;
+      background: var(--sage-50);
+      box-shadow: 0 4px 24px rgba(31,74,46,0.14), 0 0 0 2px rgba(31,74,46,0.1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
 
-  /* ══════════════════════════════════════════════════════════
-     SPLASH SCREEN
-  ══════════════════════════════════════════════════════════ */
-  #splash {
-    position: absolute; inset: 0; z-index: 100;
-    background: var(--dark);
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column;
-    transition: opacity 0.6s ease;
-  }
-  #splash.hide { opacity: 0; pointer-events: none; }
+    .status-bar { background: transparent; padding: 10px 18px 5px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .status-time { font-size: 11px; font-weight: 600; color: var(--text-dark); }
+    .status-icons { display: flex; gap: 4px; align-items: center; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dark); opacity: 0.6; }
+    .screen-content { flex: 1; overflow: hidden; position: relative; }
 
-  .lid-wrap { position: relative; width: 160px; height: 160px; }
-  .lid-base {
-    width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(ellipse at 40% 35%, #E8C97A, #B8860B 50%, #7A5500 100%);
-    border: 3px solid var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .lid-sheen {
-    position: absolute; top: 12%; left: 15%; width: 45%; height: 35%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 100%);
-    border-radius: 50%;
-  }
-  .lid-top {
-    position: absolute; inset: 0; border-radius: 50%;
-    background: linear-gradient(160deg, #D4A843 0%, #8B6010 60%, #4A3200 100%);
-    border: 2.5px solid var(--gold);
-    transform-origin: top center;
-    transition: transform 1.2s cubic-bezier(0.4,0,0.2,1), opacity 0.8s ease;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .lid-top.open { transform: rotateX(80deg) translateY(-20px); opacity: 0; }
-  .lid-top-sheen {
-    position: absolute; top: 10%; left: 18%; width: 42%; height: 32%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.28) 0%, transparent 100%);
-    border-radius: 50%;
-  }
-  .lid-handle {
-    width: 36px; height: 18px; border-radius: 18px 18px 0 0;
-    background: linear-gradient(to bottom, #E8C97A, #A0720A);
-    border: 2px solid var(--gold);
-    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  }
-  .logo-placeholder {
-    width: 70px; height: 70px; border-radius: 50%;
-    border: 2px dashed rgba(255,255,255,0.4);
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.6); font-size: 10px; text-align: center;
-    line-height: 1.3;
-  }
-  .splash-tagline {
-    color: var(--gold); font-size: 13px; margin-top: 20px;
-    letter-spacing: 2px; text-transform: uppercase;
-    opacity: 0; transition: opacity 0.8s ease 0.6s;
-  }
-  .splash-tagline.show { opacity: 1; }
-  .splash-sub { color: var(--text-gold-faint); font-size: 10px; margin-top: 6px; letter-spacing: 1px; }
+    /* ── PANTALLA 1: BIENVENIDA ── */
+    .splash { background: linear-gradient(160deg, #deecd9 0%, #eaf6f1 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+    .splash-logo-ring { width: 100px; height: 100px; border-radius: 28px; background: rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+    .pot-svg { width: 60px; height: 60px; }
+    .splash-name { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--forest); letter-spacing: 0.5px; }
+    .splash-tag { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
+    .splash-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--forest); opacity: 0.25; margin-top: 28px; }
 
-  /* ══════════════════════════════════════════════════════════
-     HOME SCREEN
-  ══════════════════════════════════════════════════════════ */
-  #home-screen {
-    display: flex; flex-direction: column;
-    opacity: 0; transition: opacity 0.5s ease;
-    height: 688px; /* phone inner height */
-    overflow: hidden;
-  }
-  #home-screen.show { opacity: 1; }
+    /* ── PANTALLA 2: INICIO ── */
+    .home { background: var(--sage-50); display: flex; flex-direction: column; height: 100%; }
+    .home-header { padding: 12px 16px 10px; flex-shrink: 0; }
+    .home-greeting { font-size: 11px; color: var(--text-muted); }
+    .home-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text-dark); margin-top: 2px; }
+    .search-bar { margin: 8px 16px 0; background: white; border-radius: 14px; height: 38px; display: flex; align-items: center; padding: 0 12px; gap: 8px; box-shadow: 0 1px 4px rgba(31,74,46,0.07); }
+    .search-icon { font-size: 15px; color: var(--text-muted); }
+    .search-text { font-size: 12px; color: var(--text-light); }
+    .chips-row { display: flex; gap: 7px; padding: 10px 16px 8px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
+    .chips-row::-webkit-scrollbar { display: none; }
+    .chip { flex-shrink: 0; background: var(--chip-bg); border-radius: 20px; padding: 5px 12px; font-size: 10.5px; color: var(--text-mid); font-weight: 500; }
+    .chip.active { background: var(--forest); color: white; }
+    .chefs-list { flex: 1; overflow-y: auto; padding: 6px 16px 12px; display: flex; flex-direction: column; gap: 9px; scrollbar-width: none; }
+    .chefs-list::-webkit-scrollbar { display: none; }
+    .chef-card { background: white; border-radius: 16px; padding: 11px; display: flex; align-items: center; gap: 11px; box-shadow: 0 1px 4px rgba(31,74,46,0.06); }
+    .chef-avatar { width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0; overflow: hidden; }
+    .chef-avatar-inner { width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; }
+    .chef-info { flex: 1; min-width: 0; }
+    .chef-name { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+    .chef-spec { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+    .chef-rating { display: flex; align-items: center; gap: 3px; margin-top: 5px; }
+    .star { color: #f0a500; font-size: 10px; }
+    .rating-num { font-size: 10px; color: var(--text-mid); font-weight: 500; }
+    .chef-price { font-size: 11px; font-weight: 600; color: var(--forest); flex-shrink: 0; }
+    .bottom-nav { height: 52px; background: white; display: flex; align-items: center; justify-content: space-around; border-top: 1px solid #e8f0e6; flex-shrink: 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .nav-icon { font-size: 18px; color: var(--text-light); }
+    .nav-icon.active { color: var(--forest); }
+    .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--forest); }
 
-  /* Header */
-  .app-header { background: var(--dark); padding: 10px 16px 12px; flex-shrink: 0; }
-  .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .app-logo-sm {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), #8B6010);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; color: #fff;
-  }
-  .app-title { color: var(--gold-light); font-size: 15px; font-weight: 500; letter-spacing: 0.5px; }
-  .menu-btn {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: rgba(201,169,110,0.15);
-    border: 0.5px solid rgba(201,169,110,0.3);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; position: relative; color: var(--gold); font-size: 18px;
-    transition: background 0.2s;
-  }
-  .menu-btn:hover { background: rgba(201,169,110,0.25); }
+    /* ── PANTALLA 3: PERFIL DEL CHEF ── */
+    .profile { background: var(--sage-50); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .chef-hero { height: 130px; background: linear-gradient(175deg, #c4dbbe 0%, #deecd9 100%); position: relative; flex-shrink: 0; display: flex; align-items: flex-end; padding: 0 16px 12px; }
+    .back-btn { position: absolute; top: 12px; left: 14px; width: 28px; height: 28px; border-radius: 9px; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; }
+    .chef-hero-name { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--forest-deep); }
+    .chef-hero-spec { font-size: 10px; color: var(--text-mid); margin-top: 2px; }
+    .profile-body { flex: 1; overflow-y: auto; padding: 12px 16px; scrollbar-width: none; }
+    .profile-body::-webkit-scrollbar { display: none; }
+    .stats-row { display: flex; gap: 7px; margin-bottom: 12px; }
+    .stat-box { flex: 1; background: white; border-radius: 12px; padding: 9px; text-align: center; }
+    .stat-val { font-size: 16px; font-weight: 600; color: var(--forest); }
+    .stat-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+    .section-head { font-size: 11px; font-weight: 600; color: var(--text-dark); margin-bottom: 7px; }
+    .bio-text { font-size: 10px; line-height: 1.6; color: var(--text-muted); margin-bottom: 12px; }
+    .cal-row { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; scrollbar-width: none; }
+    .cal-row::-webkit-scrollbar { display: none; }
+    .cal-day { flex-shrink: 0; width: 36px; background: white; border-radius: 10px; padding: 6px 4px; text-align: center; }
+    .cal-day.active { background: var(--forest); }
+    .cal-d { font-size: 8px; color: var(--text-muted); }
+    .cal-num { font-size: 13px; font-weight: 600; color: var(--text-dark); margin-top: 1px; }
+    .cal-day.active .cal-d, .cal-day.active .cal-num { color: white; }
+    .menu-cards { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+    .menu-cards::-webkit-scrollbar { display: none; }
+    .menu-card { flex-shrink: 0; width: 100px; background: white; border-radius: 12px; padding: 10px; }
+    .menu-emoji { font-size: 22px; margin-bottom: 5px; }
+    .menu-name { font-size: 10px; font-weight: 600; color: var(--text-dark); }
+    .menu-desc { font-size: 8.5px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+    .menu-price { font-size: 10px; font-weight: 600; color: var(--forest); margin-top: 5px; }
+    .sticky-bar { height: 60px; background: white; padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #e8f0e6; flex-shrink: 0; }
+    .btn-book { flex: 1; height: 38px; background: var(--forest); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .btn-book span { font-size: 11px; font-weight: 600; color: white; }
+    .btn-custom { width: 38px; height: 38px; background: var(--chip-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .btn-custom-icon { font-size: 16px; color: var(--forest); }
+    .cancel-link { font-size: 9px; color: var(--text-muted); text-decoration: underline; white-space: nowrap; }
 
-  /* Dropdown */
-  .dropdown {
-    position: absolute; top: 36px; right: 0;
-    background: var(--dark3); border: 0.5px solid var(--gold);
-    border-radius: 10px; width: 175px; z-index: 50;
-    overflow: hidden; display: none;
-  }
-  .dropdown.open { display: block; }
-  .dropdown-item {
-    padding: 10px 14px; color: var(--gold-light); font-size: 13px;
-    border-bottom: 0.5px solid rgba(201,169,110,0.15);
-    cursor: pointer; display: flex; align-items: center; gap: 8px;
-  }
-  .dropdown-item:last-child { border-bottom: none; }
-  .dropdown-item:hover { background: rgba(201,169,110,0.12); }
-  .dropdown-item i { font-size: 15px; }
+    /* ── PANTALLA 4: MI PERFIL ── */
+    .user-profile { background: var(--sage-50); display: flex; flex-direction: column; height: 100%; }
+    .up-header { background: linear-gradient(170deg, #c4dbbe 0%, #eaf6f1 100%); padding: 12px 16px 16px; flex-shrink: 0; text-align: center; }
+    .up-avatar { width: 62px; height: 62px; border-radius: 50%; background: white; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(31,74,46,0.12); }
+    .up-avatar-inner { font-size: 24px; font-weight: 600; color: var(--forest); }
+    .up-name { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--forest-deep); }
+    .up-bio { font-size: 9.5px; color: var(--text-mid); margin-top: 4px; }
+    .up-stats { display: flex; gap: 20px; justify-content: center; margin-top: 12px; }
+    .up-stat { text-align: center; }
+    .up-stat-val { font-size: 16px; font-weight: 600; color: var(--forest-deep); }
+    .up-stat-lbl { font-size: 8.5px; color: var(--text-muted); }
+    .up-body { flex: 1; overflow-y: auto; padding: 12px 16px; scrollbar-width: none; }
+    .up-body::-webkit-scrollbar { display: none; }
+    .menu-group { background: white; border-radius: 14px; overflow: hidden; margin-bottom: 9px; }
+    .menu-item { display: flex; align-items: center; padding: 11px 14px; gap: 11px; border-bottom: 1px solid #f0f5ef; }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-icon { font-size: 16px; color: var(--text-muted); }
+    .menu-item-label { font-size: 11px; color: var(--text-dark); flex: 1; }
+    .menu-item-arrow { font-size: 14px; color: var(--text-light); }
+    .menu-item-badge { background: var(--forest); color: white; font-size: 9px; border-radius: 8px; padding: 2px 7px; }
 
-  /* Search */
-  .search-bar {
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.07);
-    border: 0.5px solid rgba(201,169,110,0.4);
-    border-radius: 20px; padding: 7px 12px;
-  }
-  .search-bar i { color: var(--gold); font-size: 15px; }
-  .search-bar input {
-    background: none; border: none; outline: none;
-    color: #F5EDD8; font-size: 13px; width: 100%;
-    font-family: inherit;
-  }
-  .search-bar input::placeholder { color: rgba(201,169,110,0.4); }
-
-  /* Chips */
-  .filters-wrap {
-    background: var(--dark2); padding: 8px 12px;
-    border-bottom: 0.5px solid rgba(201,169,110,0.15);
-    flex-shrink: 0; overflow-x: auto; scrollbar-width: none;
-  }
-  .filters-wrap::-webkit-scrollbar { display: none; }
-  .chips-row { display: flex; gap: 6px; width: max-content; }
-  .chip {
-    padding: 5px 11px; border-radius: 20px; font-size: 11px; font-weight: 500;
-    border: 0.5px solid rgba(201,169,110,0.35);
-    background: transparent; color: var(--gold);
-    cursor: pointer; white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
-  }
-  .chip.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
-  .chip:hover:not(.active) { background: rgba(201,169,110,0.12); }
-
-  /* Section label */
-  .section-label {
-    padding: 12px 16px 6px;
-    font-size: 11px; font-weight: 500;
-    color: rgba(201,169,110,0.6);
-    text-transform: uppercase; letter-spacing: 1.5px;
-    background: var(--cream); flex-shrink: 0;
-  }
-
-  /* Chef list */
-  .chef-list {
-    flex: 1; overflow-y: auto; background: var(--cream);
-    scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
-    padding: 4px 0 8px;
-  }
-  .chef-card {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; cursor: pointer;
-    border-bottom: 0.5px solid rgba(201,169,110,0.12);
-    transition: background 0.15s; position: relative;
-  }
-  .chef-card:hover { background: rgba(201,169,110,0.06); }
-  .chef-card:last-child { border-bottom: none; }
-  .chef-avatar {
-    width: 58px; height: 58px; border-radius: 14px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 500; color: #fff;
-    border: 2px solid rgba(201,169,110,0.3); position: relative; overflow: hidden;
-  }
-  .rating-badge {
-    position: absolute; bottom: -1px; right: -1px;
-    background: var(--gold); color: var(--dark);
-    font-size: 8px; font-weight: 600;
-    padding: 2px 4px; border-radius: 4px;
-  }
-  .chef-info { flex: 1; min-width: 0; }
-  .chef-name { font-size: 14px; font-weight: 500; color: var(--text-main); margin-bottom: 2px; }
-  .chef-exp {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 10px; color: var(--gold-dark);
-    background: rgba(201,169,110,0.12);
-    padding: 2px 7px; border-radius: 10px; margin-bottom: 4px;
-  }
-  .chef-spec { font-size: 11px; color: var(--text-sub); line-height: 1.4; }
-  .chef-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
-  .chef-tag {
-    font-size: 9px; padding: 2px 6px; border-radius: 8px;
-    background: rgba(99,153,34,0.1); color: #3B6D11;
-    border: 0.5px solid rgba(99,153,34,0.25);
-  }
-  .chef-tag.amber { background: rgba(186,117,23,0.1); color: #633806; border-color: rgba(186,117,23,0.25); }
-  .chef-tag.blue  { background: rgba(55,138,221,0.1); color: #042C53; border-color: rgba(55,138,221,0.2); }
-  .chef-arrow { color: rgba(201,169,110,0.5); font-size: 16px; flex-shrink: 0; }
-
-  /* ══════════════════════════════════════════════════════════
-     CHEF DETAIL SCREEN
-  ══════════════════════════════════════════════════════════ */
-  #chef-detail {
-    position: absolute; inset: 0; z-index: 80;
-    background: var(--cream);
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-  #chef-detail.show { transform: translateX(0); }
-
-  /* Chef hero header */
-  .chef-hero {
-    background: var(--dark2); height: 130px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden; flex-shrink: 0;
-  }
-  .chef-hero-bg {
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(45deg,#2A1C08 0px,#2A1C08 10px,#231508 10px,#231508 20px);
-    opacity: 0.5;
-  }
-  .chef-avatar-lg {
-    width: 80px; height: 80px; border-radius: 20px;
-    border: 3px solid var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; font-weight: 500; color: #fff;
-    position: relative; z-index: 1;
-  }
-  .back-btn-d {
-    position: absolute; top: 8px; left: 12px; z-index: 2;
-    width: 28px; height: 28px; border-radius: 8px;
-    background: rgba(28,16,7,0.7); border: 0.5px solid rgba(201,169,110,0.4);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--gold); font-size: 14px;
-  }
-  .fav-btn-d {
-    position: absolute; top: 8px; right: 12px; z-index: 2;
-    width: 28px; height: 28px; border-radius: 8px;
-    background: rgba(28,16,7,0.7); border: 0.5px solid rgba(201,169,110,0.4);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--gold); font-size: 14px;
-  }
-
-  .chef-meta { background: var(--dark); padding: 10px 14px 0; flex-shrink: 0; }
-  .chef-name-lg { color: var(--gold-light); font-size: 16px; font-weight: 500; line-height: 1.2; }
-  .chef-exp-badge {
-    display: inline-flex; align-items: center; gap: 3px;
-    background: rgba(201,169,110,0.15); border: 0.5px solid rgba(201,169,110,0.3);
-    border-radius: 10px; padding: 2px 8px;
-    font-size: 10px; color: var(--gold); margin: 4px 0 3px;
-  }
-  .star-row { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
-  .star-row i { font-size: 11px; color: var(--gold); }
-  .star-val { font-size: 11px; color: var(--text-gold-faint); }
-  .chef-specs-bar {
-    display: flex; flex-wrap: wrap; gap: 4px;
-    padding: 6px 14px 10px; background: var(--dark);
-  }
-  .spec-tag {
-    font-size: 10px; padding: 3px 8px; border-radius: 10px;
-    background: rgba(201,169,110,0.1); border: 0.5px solid rgba(201,169,110,0.25);
-    color: var(--gold);
-  }
-
-  /* Tabs */
-  .tabs-bar {
-    display: flex; background: var(--dark2);
-    border-top: 0.5px solid rgba(201,169,110,0.15);
-    border-bottom: 0.5px solid rgba(201,169,110,0.15);
-    flex-shrink: 0;
-  }
-  .tab {
-    flex: 1; padding: 10px 4px; text-align: center;
-    font-size: 11px; color: rgba(201,169,110,0.5);
-    cursor: pointer; border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-  }
-  .tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
-
-  /* Scrollable body */
-  .detail-body {
-    flex: 1; overflow-y: auto; background: var(--cream);
-    scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
-  }
-
-  /* Action buttons */
-  .action-btns { display: flex; gap: 8px; padding: 12px 14px 4px; }
-  .btn-galeria {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: var(--dark); border: none; border-radius: 20px;
-    color: var(--gold-light); font-size: 11px; font-weight: 500;
-    padding: 9px 10px; cursor: pointer; transition: background 0.2s; font-family: inherit;
-  }
-  .btn-galeria:hover { background: var(--dark3); }
-  .btn-galeria i { font-size: 14px; }
-  .btn-adicionales {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: transparent; border: 1.5px solid var(--gold); border-radius: 20px;
-    color: var(--gold-dark); font-size: 11px; font-weight: 500;
-    padding: 9px 10px; cursor: pointer; transition: all 0.2s; font-family: inherit;
-  }
-  .btn-adicionales:hover { background: rgba(201,169,110,0.08); }
-  .btn-adicionales i { font-size: 14px; }
-
-  /* Gallery panel */
-  .gallery-panel { display: none; padding: 0 14px 14px; }
-  .gallery-panel.open { display: block; }
-  .gallery-section-title {
-    font-size: 10px; font-weight: 500; color: var(--gold-dark);
-    text-transform: uppercase; letter-spacing: 1.2px; margin: 12px 0 7px;
-  }
-  .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-  .g-item {
-    border-radius: 10px; border: 0.5px solid rgba(201,169,110,0.2);
-    overflow: hidden; background: #fff; cursor: pointer;
-    transition: transform 0.12s; position: relative;
-  }
-  .g-item:hover { transform: scale(0.97); }
-  .g-item.sel { border-color: var(--gold); border-width: 1.5px; }
-  .g-item.sel::after {
-    content: '✓'; position: absolute; bottom: 3px; right: 4px;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--gold); color: var(--dark);
-    font-size: 9px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .g-img { height: 52px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-  .g-name { padding: 4px 6px 5px; font-size: 10px; color: var(--text-main); font-weight: 500; line-height: 1.3; }
-
-  /* Adicionales panel */
-  .add-panel { display: none; padding: 0 14px 14px; }
-  .add-panel.open { display: block; }
-  .add-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 0; border-bottom: 0.5px solid rgba(201,169,110,0.1);
-  }
-  .add-item:last-child { border-bottom: none; }
-  .add-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .add-info { flex: 1; }
-  .add-name { font-size: 12px; font-weight: 500; color: var(--text-main); }
-  .add-desc { font-size: 10px; color: var(--text-sub); margin-top: 1px; }
-  .add-price { font-size: 11px; color: var(--gold-dark); font-weight: 500; white-space: nowrap; }
-
-  /* Menu content */
-  .menu-content { padding: 8px 14px 16px; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-  .day-block { margin-bottom: 14px; }
-  .day-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .day-name { font-size: 12px; font-weight: 500; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; }
-  .day-line { flex: 1; height: 0.5px; background: rgba(201,169,110,0.2); }
-  .meal-row {
-    display: flex; align-items: flex-start; gap: 8px;
-    padding: 7px 0; border-bottom: 0.5px solid rgba(201,169,110,0.08);
-  }
-  .meal-row:last-child { border-bottom: none; }
-  .meal-time-col { width: 56px; flex-shrink: 0; }
-  .meal-time { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(201,169,110,0.6); font-weight: 500; padding-top: 1px; }
-  .meal-icon-wrap { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; }
-  .meal-details { flex: 1; min-width: 0; }
-  .meal-name { font-size: 12px; font-weight: 500; color: var(--text-main); line-height: 1.3; }
-  .meal-desc { font-size: 10px; color: var(--text-sub); line-height: 1.4; margin-top: 1px; }
-  .meal-tags { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
-  .mtag { font-size: 9px; padding: 1px 6px; border-radius: 8px; white-space: nowrap; }
-  .mtag.v  { background: rgba(99,153,34,0.1);  color: #3B6D11; border: 0.5px solid rgba(99,153,34,0.2); }
-  .mtag.gf { background: rgba(186,117,23,0.1); color: #633806; border: 0.5px solid rgba(186,117,23,0.2); }
-  .mtag.sf { background: rgba(30,132,73,0.1);  color: #085041; border: 0.5px solid rgba(30,132,73,0.2); }
-  .mtag.k  { background: rgba(83,74,183,0.1);  color: #26215C; border: 0.5px solid rgba(83,74,183,0.2); }
-
-  /* Share footer */
-  .share-footer {
-    padding: 10px 14px 14px; background: var(--cream);
-    border-top: 0.5px solid rgba(201,169,110,0.15);
-    flex-shrink: 0;
-  }
-  .share-count-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .sel-count { font-size: 11px; color: var(--gold-dark); }
-  .share-btn-main {
-    width: 100%; background: var(--dark); border: none; border-radius: 20px;
-    color: var(--gold-light); font-size: 13px; font-weight: 500;
-    padding: 12px 20px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: background 0.2s; font-family: inherit;
-  }
-  .share-btn-main:hover { background: var(--dark3); }
-  .share-btn-main i { font-size: 16px; }
-
-  /* Toast */
-  .toast {
-    position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
-    background: var(--dark); color: var(--gold); font-size: 11px;
-    padding: 7px 16px; border-radius: 16px; border: 0.5px solid var(--gold);
-    white-space: nowrap; z-index: 200; opacity: 0; transition: opacity 0.3s;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; }
-
-  /* Bottom nav */
-  .bottom-nav {
-    height: 52px; background: var(--dark);
-    border-top: 0.5px solid rgba(201,169,110,0.2);
-    display: flex; align-items: center; justify-content: space-around;
-    padding: 0 8px; flex-shrink: 0;
-  }
-  .nav-i { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 4px 12px; border-radius: 8px; transition: background 0.15s; }
-  .nav-i:hover { background: rgba(201,169,110,0.08); }
-  .nav-i i { font-size: 18px; color: rgba(201,169,110,0.4); }
-  .nav-i.active i { color: var(--gold); }
-  .nav-lbl { font-size: 8px; color: rgba(201,169,110,0.4); }
-  .nav-i.active .nav-lbl { color: var(--gold); }
-</style>
+    /* ── PANTALLA 5: PAGO ── */
+    .checkout { background: var(--sage-50); display: flex; flex-direction: column; height: 100%; }
+    .co-header { padding: 12px 16px 8px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
+    .co-back { width: 28px; height: 28px; border-radius: 9px; background: var(--chip-bg); display: flex; align-items: center; justify-content: center; }
+    .co-title { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--text-dark); }
+    .co-body { flex: 1; overflow-y: auto; padding: 4px 16px 12px; scrollbar-width: none; }
+    .co-body::-webkit-scrollbar { display: none; }
+    .booking-summary { background: white; border-radius: 16px; padding: 12px 14px; margin-bottom: 11px; }
+    .bs-chef { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f5ef; margin-bottom: 10px; }
+    .bs-avatar { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; }
+    .bs-name { font-size: 11px; font-weight: 600; color: var(--text-dark); }
+    .bs-detail { font-size: 9.5px; color: var(--text-muted); }
+    .bs-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    .bs-line-lbl { font-size: 10px; color: var(--text-muted); }
+    .bs-line-val { font-size: 10px; color: var(--text-dark); font-weight: 500; }
+    .bs-total { display: flex; justify-content: space-between; margin-top: 9px; padding-top: 9px; border-top: 1px solid #f0f5ef; }
+    .bs-total-lbl { font-size: 11px; font-weight: 600; color: var(--text-dark); }
+    .bs-total-val { font-size: 14px; font-weight: 700; color: var(--forest); }
+    .pay-section { background: white; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+    .pay-label { font-size: 10px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px; }
+    .card-field { background: var(--sage-50); border-radius: 10px; height: 34px; display: flex; align-items: center; padding: 0 12px; margin-bottom: 7px; gap: 7px; }
+    .card-field-icon { font-size: 15px; color: var(--text-muted); }
+    .card-field-text { font-size: 10.5px; color: var(--text-light); flex: 1; }
+    .card-row { display: flex; gap: 7px; }
+    .card-row .card-field { flex: 1; }
+    .pay-divider { display: flex; align-items: center; gap: 9px; margin: 9px 0; }
+    .pay-divider-line { flex: 1; height: 1px; background: #e8f0e6; }
+    .pay-divider-text { font-size: 9.5px; color: var(--text-light); }
+    .alt-pay { display: flex; gap: 7px; }
+    .alt-pay-btn { flex: 1; height: 34px; border-radius: 10px; background: var(--sage-50); display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #d8ecd4; }
+    .alt-pay-lbl { font-size: 10.5px; font-weight: 600; color: var(--text-dark); }
+    .co-footer { padding: 10px 16px 14px; flex-shrink: 0; }
+    .pay-btn { width: 100%; height: 46px; background: var(--forest); border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .pay-btn-text { font-size: 13px; font-weight: 600; color: white; }
+    .pay-btn-amount { font-size: 12px; color: rgba(255,255,255,0.7); }
+    .lock-icon { font-size: 14px; color: rgba(255,255,255,0.6); }
+  </style>
 </head>
 <body>
+<div class="flow-wrap">
+  <div class="flow-title">Porta</div>
+  <div class="flow-sub">Plataforma de chefs privados · Flujo de UI</div>
 
-<div class="page-header">
-  <div class="page-title">Chef Privado</div>
-  <div class="page-sub">Mockup interactivo · Toca los chefs para explorar</div>
+  <div class="screens-label">
+    <div class="slabel">01 · Bienvenida</div>
+    <div class="slabel">02 · Inicio</div>
+    <div class="slabel">03 · Perfil del chef</div>
+    <div class="slabel">04 · Mi perfil</div>
+    <div class="slabel">05 · Pago</div>
+  </div>
+
+  <div class="phone-row">
+
+    <!-- PANTALLA 1: BIENVENIDA -->
+    <div class="phone">
+      <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div></div>
+      <div class="screen-content">
+        <div class="splash">
+          <div class="splash-logo-ring">
+            <svg class="pot-svg" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="25" cy="16" rx="10" ry="4.5" fill="#1f4a2e" opacity="0.18"/>
+              <rect x="16" y="13" width="18" height="3.5" rx="1.5" fill="#2d6140"/>
+              <ellipse cx="25" cy="12" rx="7" ry="6" fill="#2d6140"/>
+              <ellipse cx="20" cy="10" rx="3.5" ry="5" fill="#3a7d44"/>
+              <ellipse cx="25" cy="9" rx="3.5" ry="5.5" fill="#3a7d44"/>
+              <ellipse cx="30" cy="10" rx="3.5" ry="5" fill="#3a7d44"/>
+              <rect x="12" y="26" width="26" height="16" rx="6" fill="#1f4a2e"/>
+              <ellipse cx="25" cy="26" rx="13" ry="3.5" fill="#2d6140"/>
+              <rect x="7" y="28" width="7" height="4" rx="2" fill="#1f4a2e"/>
+              <rect x="36" y="28" width="7" height="4" rx="2" fill="#1f4a2e"/>
+              <path d="M20 23 Q21 21 20 19" stroke="#a3c69a" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+              <path d="M25 23 Q26 20 25 18" stroke="#a3c69a" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+              <path d="M30 23 Q31 21 30 19" stroke="#a3c69a" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+            </svg>
+          </div>
+          <div class="splash-name">porta</div>
+          <div class="splash-tag">tu mesa, su arte</div>
+          <div class="splash-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 2: INICIO -->
+    <div class="phone">
+      <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div></div>
+      <div class="screen-content" style="display:flex;flex-direction:column;height:100%;">
+        <div class="home" style="height:100%;">
+          <div class="home-header">
+            <div class="home-greeting">Buenos días, Mía 👋</div>
+            <div class="home-title">Encuentra tu chef</div>
+          </div>
+          <div class="search-bar">
+            <i class="ti ti-search search-icon"></i>
+            <span class="search-text">Cocina, dieta, ocasión…</span>
+          </div>
+          <div class="chips-row">
+            <div class="chip active">Todos</div>
+            <div class="chip">Bajo sodio</div>
+            <div class="chip">Bajo azúcar</div>
+            <div class="chip">Vegano</div>
+            <div class="chip">Kosher</div>
+          </div>
+          <div class="chefs-list">
+            <div class="chef-card">
+              <div class="chef-avatar"><div class="chef-avatar-inner" style="background:#deecd9;color:#1f4a2e;">RL</div></div>
+              <div class="chef-info">
+                <div class="chef-name">Rafael Luís</div>
+                <div class="chef-spec">Mediterránea · Campo a mesa</div>
+                <div class="chef-rating"><span class="star">★★★★★</span><span class="rating-num">4.9 (128)</span></div>
+              </div>
+              <div class="chef-price">$180/hr</div>
+            </div>
+            <div class="chef-card">
+              <div class="chef-avatar"><div class="chef-avatar-inner" style="background:#a8d9c8;color:#0f6e56;">YK</div></div>
+              <div class="chef-info">
+                <div class="chef-name">Yuki Kaito</div>
+                <div class="chef-spec">Japonesa · Omakase</div>
+                <div class="chef-rating"><span class="star">★★★★★</span><span class="rating-num">5.0 (84)</span></div>
+              </div>
+              <div class="chef-price">$240/hr</div>
+            </div>
+            <div class="chef-card">
+              <div class="chef-avatar"><div class="chef-avatar-inner" style="background:#c4dbbe;color:#162d1e;">AM</div></div>
+              <div class="chef-info">
+                <div class="chef-name">Amara Mbeki</div>
+                <div class="chef-spec">Panafricana · Vegetal</div>
+                <div class="chef-rating"><span class="star">★★★★☆</span><span class="rating-num">4.7 (52)</span></div>
+              </div>
+              <div class="chef-price">$155/hr</div>
+            </div>
+            <div class="chef-card">
+              <div class="chef-avatar"><div class="chef-avatar-inner" style="background:#eaf6f1;color:#2d6140;">SB</div></div>
+              <div class="chef-info">
+                <div class="chef-name">Sofía Brennan</div>
+                <div class="chef-spec">Francesa · Repostería</div>
+                <div class="chef-rating"><span class="star">★★★★★</span><span class="rating-num">4.8 (97)</span></div>
+              </div>
+              <div class="chef-price">$200/hr</div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><i class="ti ti-home nav-icon active"></i><div class="nav-dot"></div></div>
+            <div class="nav-item"><i class="ti ti-search nav-icon"></i></div>
+            <div class="nav-item"><i class="ti ti-heart nav-icon"></i></div>
+            <div class="nav-item"><i class="ti ti-user nav-icon"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 3: PERFIL DEL CHEF -->
+    <div class="phone">
+      <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div></div>
+      <div class="screen-content" style="display:flex;flex-direction:column;height:100%;">
+        <div class="profile">
+          <div class="chef-hero">
+            <div class="back-btn"><i class="ti ti-chevron-left" style="font-size:14px;color:#1f4a2e;"></i></div>
+            <div style="display:flex;align-items:flex-end;gap:12px;">
+              <div style="width:60px;height:60px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#1f4a2e;box-shadow:0 2px 8px rgba(31,74,46,0.15);">RL</div>
+              <div>
+                <div class="chef-hero-name">Rafael Luís</div>
+                <div class="chef-hero-spec">Mediterránea · Barcelona</div>
+              </div>
+            </div>
+            <div style="position:absolute;top:12px;right:14px;display:flex;gap:7px;">
+              <div style="width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,0.7);display:flex;align-items:center;justify-content:center;"><i class="ti ti-heart" style="font-size:14px;color:#1f4a2e;"></i></div>
+              <div style="width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,0.7);display:flex;align-items:center;justify-content:center;"><i class="ti ti-share" style="font-size:14px;color:#1f4a2e;"></i></div>
+            </div>
+          </div>
+          <div class="profile-body">
+            <div class="stats-row">
+              <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">Años exp.</div></div>
+              <div class="stat-box"><div class="stat-val">432</div><div class="stat-lbl">Reservas</div></div>
+              <div class="stat-box"><div class="stat-val" style="display:flex;align-items:center;justify-content:center;gap:2px;"><span style="color:#f0a500;font-size:12px;">★</span>4.9</div><div class="stat-lbl">Valoración</div></div>
+            </div>
+            <div class="section-head">Acerca de</div>
+            <div class="bio-text">Formado en Barcelona y Sevilla, Rafael lleva el calor del Mediterráneo a tu hogar. Especialista en cocina de temporada y mariscos de origen local.</div>
+            <div class="section-head">Disponibilidad — Junio 2025</div>
+            <div class="cal-row">
+              <div class="cal-day"><div class="cal-d">Lun</div><div class="cal-num">2</div></div>
+              <div class="cal-day active"><div class="cal-d">Mar</div><div class="cal-num">3</div></div>
+              <div class="cal-day"><div class="cal-d">Mié</div><div class="cal-num">4</div></div>
+              <div class="cal-day"><div class="cal-d">Jue</div><div class="cal-num">5</div></div>
+              <div class="cal-day active"><div class="cal-d">Vie</div><div class="cal-num">6</div></div>
+              <div class="cal-day"><div class="cal-d">Sáb</div><div class="cal-num">7</div></div>
+              <div class="cal-day active"><div class="cal-d">Dom</div><div class="cal-num">8</div></div>
+            </div>
+            <div class="section-head">Menú sugerido</div>
+            <div class="menu-cards">
+              <div class="menu-card">
+                <div class="menu-emoji">🥗</div>
+                <div class="menu-name">Mezze del Huerto</div>
+                <div class="menu-desc">5 tiempos de temporada</div>
+                <div class="menu-price">$85/pp</div>
+              </div>
+              <div class="menu-card">
+                <div class="menu-emoji">🐟</div>
+                <div class="menu-name">Degustación Costera</div>
+                <div class="menu-desc">7 tiempos de mariscos</div>
+                <div class="menu-price">$140/pp</div>
+              </div>
+              <div class="menu-card">
+                <div class="menu-emoji">🍋</div>
+                <div class="menu-name">Ligero y Vital</div>
+                <div class="menu-desc">Bajo cal. y sodio</div>
+                <div class="menu-price">$70/pp</div>
+              </div>
+            </div>
+          </div>
+          <div class="sticky-bar">
+            <div class="btn-book"><span>Reservar ahora</span></div>
+            <div class="btn-custom"><i class="ti ti-pencil btn-custom-icon"></i></div>
+            <div class="cancel-link">Política de cancelación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 4: MI PERFIL -->
+    <div class="phone">
+      <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div></div>
+      <div class="screen-content" style="display:flex;flex-direction:column;height:100%;">
+        <div class="user-profile">
+          <div class="up-header">
+            <div class="up-avatar"><div class="up-avatar-inner">M</div></div>
+            <div class="up-name">Mía Delacroix</div>
+            <div class="up-bio">Entusiasta del bienestar · Bogotá, CO</div>
+            <div class="up-stats">
+              <div class="up-stat"><div class="up-stat-val">14</div><div class="up-stat-lbl">Reservas</div></div>
+              <div class="up-stat"><div class="up-stat-val" style="display:flex;align-items:center;gap:2px;"><span style="color:#f0a500;font-size:13px;">★</span>4.8</div><div class="up-stat-lbl">Valoración</div></div>
+              <div class="up-stat"><div class="up-stat-val">6</div><div class="up-stat-lbl">Chefs guardados</div></div>
+            </div>
+          </div>
+          <div class="up-body">
+            <div class="menu-group">
+              <div class="menu-item">
+                <i class="ti ti-calendar menu-item-icon"></i>
+                <span class="menu-item-label">Próximas reservas</span>
+                <span class="menu-item-badge">2</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+              <div class="menu-item">
+                <i class="ti ti-history menu-item-icon"></i>
+                <span class="menu-item-label">Reservas pasadas</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+            </div>
+            <div class="menu-group">
+              <div class="menu-item">
+                <i class="ti ti-star menu-item-icon"></i>
+                <span class="menu-item-label">Mis recomendaciones</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+              <div class="menu-item">
+                <i class="ti ti-heart menu-item-icon"></i>
+                <span class="menu-item-label">Chefs guardados</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+            </div>
+            <div class="menu-group">
+              <div class="menu-item">
+                <i class="ti ti-credit-card menu-item-icon"></i>
+                <span class="menu-item-label">Métodos de pago</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+              <div class="menu-item">
+                <i class="ti ti-settings menu-item-icon"></i>
+                <span class="menu-item-label">Configuración</span>
+                <i class="ti ti-chevron-right menu-item-arrow"></i>
+              </div>
+            </div>
+            <div class="menu-group">
+              <div class="menu-item" style="justify-content:center;">
+                <span style="font-size:11px;color:#cc4444;font-weight:500;">Cerrar sesión</span>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><i class="ti ti-home nav-icon"></i></div>
+            <div class="nav-item"><i class="ti ti-search nav-icon"></i></div>
+            <div class="nav-item"><i class="ti ti-heart nav-icon"></i></div>
+            <div class="nav-item"><i class="ti ti-user nav-icon active"></i><div class="nav-dot"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 5: PAGO -->
+    <div class="phone">
+      <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div></div>
+      <div class="screen-content" style="display:flex;flex-direction:column;height:100%;">
+        <div class="checkout">
+          <div class="co-header">
+            <div class="co-back"><i class="ti ti-chevron-left" style="font-size:14px;color:#1f4a2e;"></i></div>
+            <div class="co-title">Pago</div>
+          </div>
+          <div class="co-body">
+            <div class="booking-summary">
+              <div class="bs-chef">
+                <div class="bs-avatar" style="background:#deecd9;color:#1f4a2e;">RL</div>
+                <div>
+                  <div class="bs-name">Rafael Luís · Mezze del Huerto</div>
+                  <div class="bs-detail">Mar 3 jun · 19:00 · 2 comensales</div>
+                </div>
+              </div>
+              <div class="bs-line"><span class="bs-line-lbl">Tarifa del chef (2 hrs)</span><span class="bs-line-val">$360.00</span></div>
+              <div class="bs-line"><span class="bs-line-lbl">Menú · Mezze del Huerto × 2</span><span class="bs-line-val">$170.00</span></div>
+              <div class="bs-line"><span class="bs-line-lbl">Ingredientes y compras</span><span class="bs-line-val">$48.00</span></div>
+              <div class="bs-line"><span class="bs-line-lbl">Tarifa de servicio</span><span class="bs-line-val">$28.00</span></div>
+              <div class="bs-total"><span class="bs-total-lbl">Total</span><span class="bs-total-val">$606.00</span></div>
+            </div>
+            <div class="pay-section">
+              <div class="pay-label">Pagar con tarjeta</div>
+              <div class="card-field"><i class="ti ti-credit-card card-field-icon"></i><span class="card-field-text">Número de tarjeta</span></div>
+              <div class="card-row">
+                <div class="card-field"><span class="card-field-text">MM / AA</span></div>
+                <div class="card-field"><span class="card-field-text">CVC</span></div>
+              </div>
+              <div class="card-field"><i class="ti ti-user card-field-icon"></i><span class="card-field-text">Nombre del titular</span></div>
+              <div class="pay-divider">
+                <div class="pay-divider-line"></div>
+                <span class="pay-divider-text">o pagar con</span>
+                <div class="pay-divider-line"></div>
+              </div>
+              <div class="alt-pay">
+                <div class="alt-pay-btn">
+                  <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 2.5C8.1 2.5 9 3 9.5 3.8C8.8 4.2 8.3 5 8.3 5.9C8.3 7 8.9 7.9 9.8 8.3C9.5 9.2 8.7 11.5 7 11.5C6.2 11.5 5.7 11 4.9 11C4.1 11 3.5 11.5 2.8 11.5C1.2 11.5 0 9 0 6.5C0 4.2 1.3 2.5 3 2.5C3.8 2.5 4.4 3 5 3C5.6 3 6.3 2.5 7 2.5ZM7 1.5C6.3 1.5 5.5 1.9 5 2.3C4.6 1.9 3.9 1.5 3 1.5C1 1.5 0 3 0 5H1C1 3.5 1.8 2.5 3 2.5C3.7 2.5 4.3 2.9 4.7 3.3L5 3.7L5.3 3.3C5.7 2.9 6.3 2.5 7 2.5V1.5Z" fill="#1a2e1c" opacity="0.6"/></svg>
+                  <span class="alt-pay-lbl">Apple Pay</span>
+                </div>
+                <div class="alt-pay-btn">
+                  <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="7" r="4" fill="#EA4335" opacity="0.8"/><circle cx="9" cy="7" r="4" fill="#FBBC05" opacity="0.8"/><path d="M7 4.1C7.9 4.8 8.5 5.8 8.5 7C8.5 8.2 7.9 9.2 7 9.9C6.1 9.2 5.5 8.2 5.5 7C5.5 5.8 6.1 4.8 7 4.1Z" fill="#FF6D00" opacity="0.85"/></svg>
+                  <span class="alt-pay-lbl">Google Pay</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="co-footer">
+            <div class="pay-btn">
+              <i class="ti ti-lock lock-icon"></i>
+              <span class="pay-btn-text">Pagar de forma segura</span>
+              <span class="pay-btn-amount">$606</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
-
-<div class="phone-wrap">
-<div class="phone">
-
-  <div class="sb">
-    <span class="sb-t">9:41</span>
-    <div class="sb-ic">
-      <i class="ti ti-wifi"></i>
-      <i class="ti ti-battery-2"></i>
-    </div>
-  </div>
-
-  <!-- ── SPLASH ───────────────────────────────────────────── -->
-  <div id="splash">
-    <div class="lid-wrap">
-      <div class="lid-base">
-        <div class="lid-sheen"></div>
-        <div class="logo-placeholder">Tu<br>Logo</div>
-      </div>
-      <div class="lid-top" id="lid-top">
-        <div class="lid-top-sheen"></div>
-        <div class="lid-handle"></div>
-      </div>
-    </div>
-    <div class="splash-tagline" id="splash-tag">Chef Privado</div>
-    <div class="splash-sub">Gastronomía a tu medida</div>
-  </div>
-
-  <!-- ── HOME SCREEN ─────────────────────────────────────── -->
-  <div id="home-screen">
-    <div class="app-header">
-      <div class="header-row">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="app-logo-sm"><i class="ti ti-chef-hat" style="font-size:16px;"></i></div>
-          <div>
-            <div class="app-title">Chef Privado</div>
-            <div style="color:rgba(201,169,110,0.45);font-size:10px;letter-spacing:0.5px;">Bogotá, CO</div>
-          </div>
-        </div>
-        <div class="menu-btn" id="menu-btn">
-          <i class="ti ti-dots-vertical"></i>
-          <div class="dropdown" id="dropdown">
-            <div class="dropdown-item"><i class="ti ti-settings"></i>Configuración</div>
-            <div class="dropdown-item"><i class="ti ti-user"></i>Mi Perfil</div>
-            <div class="dropdown-item"><i class="ti ti-file-text"></i>Términos y Condiciones</div>
-          </div>
-        </div>
-      </div>
-      <div class="search-bar">
-        <i class="ti ti-search"></i>
-        <input type="text" placeholder="Buscar chefs, platos, especialidades…">
-      </div>
-    </div>
-
-    <div class="filters-wrap">
-      <div class="chips-row">
-        <div class="chip active">Gluten Free</div>
-        <div class="chip">Sodio Free</div>
-        <div class="chip active">Sugar Free</div>
-        <div class="chip">Vegan</div>
-        <div class="chip">Vegetariana</div>
-        <div class="chip">Kosher</div>
-        <div class="chip">Italiana</div>
-        <div class="chip">Francesa</div>
-        <div class="chip">Alemana</div>
-        <div class="chip">Pacífico</div>
-        <div class="chip">Boyacá</div>
-        <div class="chip">Medellín</div>
-        <div class="chip">Huila</div>
-        <div class="chip">Tolima</div>
-        <div class="chip">Postres</div>
-        <div class="chip">Ocasiones</div>
-        <div class="chip">Experiencias</div>
-      </div>
-    </div>
-
-    <div class="section-label">Chefs disponibles · 24</div>
-
-    <div class="chef-list">
-      <div class="chef-card" data-chef="0">
-        <div class="chef-avatar" style="background:linear-gradient(135deg,#8B4513,#5C2D0A);">
-          MV<div class="rating-badge">⭐ 4.9</div>
-        </div>
-        <div class="chef-info">
-          <div class="chef-name">Mariana Valdivia</div>
-          <div class="chef-exp"><i class="ti ti-award" style="font-size:10px;"></i>14 años</div>
-          <div class="chef-spec">Cocina andina · Postres sin azúcar · Gluten Free</div>
-          <div class="chef-tags">
-            <span class="chef-tag">Sugar Free</span>
-            <span class="chef-tag">Gluten Free</span>
-            <span class="chef-tag amber">Ocasiones</span>
-          </div>
-        </div>
-        <i class="ti ti-chevron-right chef-arrow"></i>
-      </div>
-      <div class="chef-card" data-chef="1">
-        <div class="chef-avatar" style="background:linear-gradient(135deg,#1A5276,#0B3D6B);">
-          CR<div class="rating-badge">⭐ 4.8</div>
-        </div>
-        <div class="chef-info">
-          <div class="chef-name">Carlos Restrepo</div>
-          <div class="chef-exp"><i class="ti ti-award" style="font-size:10px;"></i>9 años</div>
-          <div class="chef-spec">Tradición Medellín · Francesa · Vegana</div>
-          <div class="chef-tags">
-            <span class="chef-tag">Vegan</span>
-            <span class="chef-tag blue">Francesa</span>
-            <span class="chef-tag amber">Medellín</span>
-          </div>
-        </div>
-        <i class="ti ti-chevron-right chef-arrow"></i>
-      </div>
-      <div class="chef-card" data-chef="2">
-        <div class="chef-avatar" style="background:linear-gradient(135deg,#1E8449,#0E5C2A);">
-          SP<div class="rating-badge">⭐ 5.0</div>
-        </div>
-        <div class="chef-info">
-          <div class="chef-name">Sofía Pedraza</div>
-          <div class="chef-exp"><i class="ti ti-award" style="font-size:10px;"></i>18 años</div>
-          <div class="chef-spec">Cocina del Pacífico · Mariscos · Kosher</div>
-          <div class="chef-tags">
-            <span class="chef-tag">Kosher</span>
-            <span class="chef-tag amber">Pacífico</span>
-            <span class="chef-tag blue">Experiencias</span>
-          </div>
-        </div>
-        <i class="ti ti-chevron-right chef-arrow"></i>
-      </div>
-      <div class="chef-card" data-chef="3">
-        <div class="chef-avatar" style="background:linear-gradient(135deg,#7D3C98,#4A1A6B);">
-          JM<div class="rating-badge">⭐ 4.7</div>
-        </div>
-        <div class="chef-info">
-          <div class="chef-name">Jorge Montoya</div>
-          <div class="chef-exp"><i class="ti ti-award" style="font-size:10px;"></i>11 años</div>
-          <div class="chef-spec">Repostería · Postres · Tolima · Sin gluten</div>
-          <div class="chef-tags">
-            <span class="chef-tag">Gluten Free</span>
-            <span class="chef-tag amber">Postres</span>
-            <span class="chef-tag amber">Tolima</span>
-          </div>
-        </div>
-        <i class="ti ti-chevron-right chef-arrow"></i>
-      </div>
-    </div>
-
-    <div class="bottom-nav">
-      <div class="nav-i active"><i class="ti ti-home"></i><span class="nav-lbl">Inicio</span></div>
-      <div class="nav-i"><i class="ti ti-calendar"></i><span class="nav-lbl">Reservas</span></div>
-      <div class="nav-i"><i class="ti ti-heart"></i><span class="nav-lbl">Favoritos</span></div>
-      <div class="nav-i"><i class="ti ti-user"></i><span class="nav-lbl">Perfil</span></div>
-    </div>
-  </div>
-
-  <!-- ── CHEF DETAIL SCREEN ─────────────────────────────── -->
-  <div id="chef-detail">
-
-    <div class="chef-hero">
-      <div class="chef-hero-bg"></div>
-      <div class="back-btn-d" id="back-btn"><i class="ti ti-arrow-left"></i></div>
-      <div class="fav-btn-d"><i class="ti ti-heart"></i></div>
-      <div class="chef-avatar-lg" id="detail-avatar" style="background:linear-gradient(135deg,#8B4513,#5C2D0A);">MV</div>
-    </div>
-
-    <div class="chef-meta">
-      <div class="chef-name-lg" id="detail-name">Mariana Valdivia</div>
-      <div class="chef-exp-badge" id="detail-exp"><i class="ti ti-award" style="font-size:10px;"></i> 14 años de experiencia</div>
-      <div class="star-row">
-        <i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
-        <span class="star-val" id="detail-rating">4.9 · 87 reseñas</span>
-      </div>
-    </div>
-    <div class="chef-specs-bar" id="detail-specs">
-      <span class="spec-tag">Cocina andina</span>
-      <span class="spec-tag">Postres sin azúcar</span>
-      <span class="spec-tag">Gluten Free</span>
-      <span class="spec-tag">Vegana</span>
-      <span class="spec-tag">Tradición Boyacá</span>
-    </div>
-
-    <div class="tabs-bar">
-      <div class="tab active" data-tab="semanal">Menú semanal</div>
-      <div class="tab" data-tab="finde">Fin de semana</div>
-    </div>
-
-    <div class="detail-body">
-      <div class="action-btns">
-        <button class="btn-galeria" id="btn-galeria"><i class="ti ti-sparkles"></i>Crea tu menú</button>
-        <button class="btn-adicionales" id="btn-adicionales"><i class="ti ti-plus"></i>Adicionales</button>
-      </div>
-
-      <!-- Gallery -->
-      <div class="gallery-panel" id="gallery-panel">
-        <div style="padding: 0 14px;">
-          <div class="gallery-section-title">Entradas</div>
-          <div class="gallery-grid">
-            <div class="g-item" data-gi="0"><div class="g-img" style="background:#FEF9EE;">🥗</div><div class="g-name">Ensalada quinoa</div></div>
-            <div class="g-item" data-gi="1"><div class="g-img" style="background:#FFF3E8;">🥑</div><div class="g-name">Guacamole andino</div></div>
-            <div class="g-item" data-gi="2"><div class="g-img" style="background:#EEFBF3;">🥕</div><div class="g-name">Crema zanahoria</div></div>
-          </div>
-          <div class="gallery-section-title">Platos fuertes</div>
-          <div class="gallery-grid">
-            <div class="g-item" data-gi="3"><div class="g-img" style="background:#FFF3E8;">🍗</div><div class="g-name">Pollo al ajillo</div></div>
-            <div class="g-item" data-gi="4"><div class="g-img" style="background:#EEFBF3;">🫘</div><div class="g-name">Bandeja vegan</div></div>
-            <div class="g-item" data-gi="5"><div class="g-img" style="background:#FEF9EE;">🐟</div><div class="g-name">Trucha al limón</div></div>
-            <div class="g-item" data-gi="6"><div class="g-img" style="background:#F5EEFF;">🥩</div><div class="g-name">Lomo fino andino</div></div>
-            <div class="g-item" data-gi="7"><div class="g-img" style="background:#FFF5EE;">🍲</div><div class="g-name">Ajiaco sin sal</div></div>
-            <div class="g-item" data-gi="8"><div class="g-img" style="background:#EEFBF3;">🥦</div><div class="g-name">Bowl vegetal</div></div>
-          </div>
-          <div class="gallery-section-title">Postres</div>
-          <div class="gallery-grid">
-            <div class="g-item" data-gi="9"><div class="g-img" style="background:#FDF0F8;">🍮</div><div class="g-name">Flan de panela</div></div>
-            <div class="g-item" data-gi="10"><div class="g-img" style="background:#EEF6FF;">🧁</div><div class="g-name">Cupcake maíz</div></div>
-            <div class="g-item" data-gi="11"><div class="g-img" style="background:#FFFBE8;">🍓</div><div class="g-name">Fresas con crema</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Adicionales -->
-      <div class="add-panel" id="add-panel">
-        <div style="padding: 0 14px;">
-          <div class="add-item">
-            <div class="add-icon" style="background:#FDF0F8;">🍮</div>
-            <div class="add-info"><div class="add-name">Postres individuales</div><div class="add-desc">Flan, brownies GF, mousse de maracuyá</div></div>
-            <div class="add-price">desde $8k</div>
-          </div>
-          <div class="add-item">
-            <div class="add-icon" style="background:#EEFBF3;">🥤</div>
-            <div class="add-info"><div class="add-name">Batidos funcionales</div><div class="add-desc">Verde detox, proteína vegetal, antioxidante</div></div>
-            <div class="add-price">desde $12k</div>
-          </div>
-          <div class="add-item">
-            <div class="add-icon" style="background:#FEF9EE;">🫙</div>
-            <div class="add-info"><div class="add-name">Encurtidos artesanales</div><div class="add-desc">Verduras fermentadas, kimchi andino</div></div>
-            <div class="add-price">desde $15k</div>
-          </div>
-          <div class="add-item">
-            <div class="add-icon" style="background:#FFF3E8;">🫙</div>
-            <div class="add-info"><div class="add-name">Salsas y panes</div><div class="add-desc">Pan de yuca GF, chimichurri, ají negro</div></div>
-            <div class="add-price">desde $9k</div>
-          </div>
-          <div class="add-item">
-            <div class="add-icon" style="background:#F5EEFF;">🌰</div>
-            <div class="add-info"><div class="add-name">Snacks saludables</div><div class="add-desc">Frutos secos, chips de plátano, granola</div></div>
-            <div class="add-price">desde $7k</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Menu content -->
-      <div class="menu-content">
-        <div class="tab-content active" id="tab-semanal">
-
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Lunes</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FEF9EE;">☕</div>
-              <div class="meal-details">
-                <div class="meal-name">Tazón de avena con frutas del bosque</div>
-                <div class="meal-desc">Avena integral, mora, arándano, miel de agave</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag sf">Sin gluten</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF3E8;">🍗</div>
-              <div class="meal-details">
-                <div class="meal-name">Pechuga de pollo al ajillo andino</div>
-                <div class="meal-desc">Con arroz integral, patacones y ensalada verde</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#EEFBF3;">🥗</div>
-              <div class="meal-details">
-                <div class="meal-name">Ensalada tibia de quinoa y aguacate</div>
-                <div class="meal-desc">Quinoa, aguacate, tomate cherry, aderezo de limón</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag sf">Sin azúcar</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Martes</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FDF0F8;">🥞</div>
-              <div class="meal-details">
-                <div class="meal-name">Panquecas de maíz criollo</div>
-                <div class="meal-desc">Con mermelada de mora artesanal sin azúcar</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span><span class="mtag sf">Sin azúcar</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF5EE;">🍲</div>
-              <div class="meal-details">
-                <div class="meal-name">Ajiaco bogotano bajo en sodio</div>
-                <div class="meal-desc">Papa criolla, pechuga, guascas, crema de coco</div>
-                <div class="meal-tags"><span class="mtag k">Kosher</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#EEFBF3;">🫘</div>
-              <div class="meal-details">
-                <div class="meal-name">Bandeja de legumbres al vapor</div>
-                <div class="meal-desc">Lentejas, garbanzos, vegetales salteados</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Miércoles</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FEF9EE;">🥑</div>
-              <div class="meal-details">
-                <div class="meal-name">Tostadas de yuca con guacamole</div>
-                <div class="meal-desc">Yuca horneada, aguacate, tomate, cilantro</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag sf">Sin gluten</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF3E8;">🐟</div>
-              <div class="meal-details">
-                <div class="meal-name">Trucha del Huila al limón y hierbas</div>
-                <div class="meal-desc">Con vegetales al vapor y papa criolla</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span><span class="mtag sf">Sin azúcar</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#F5EEFF;">🥦</div>
-              <div class="meal-details">
-                <div class="meal-name">Crema de brócoli y cúrcuma</div>
-                <div class="meal-desc">Brócoli, cúrcuma, jengibre, leche de almendra</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Jueves</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FFFBE8;">🍓</div>
-              <div class="meal-details">
-                <div class="meal-name">Bowl de granola artesanal</div>
-                <div class="meal-desc">Granola GF, yogur de coco, fresas, maracuyá</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF3E8;">🥩</div>
-              <div class="meal-details">
-                <div class="meal-name">Lomo fino a la plancha con chimichurri</div>
-                <div class="meal-desc">Con arroz de coliflor y ensalada de remolacha</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#EEF6FF;">🥕</div>
-              <div class="meal-details">
-                <div class="meal-name">Sopa de zanahoria y jengibre</div>
-                <div class="meal-desc">Con crutones de yuca horneada</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag sf">Sin gluten</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Viernes</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FDF0F8;">🧃</div>
-              <div class="meal-details">
-                <div class="meal-name">Batido verde detox + tostada integral</div>
-                <div class="meal-desc">Espinaca, manzana verde, limón, semillas de chía</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag sf">Sin azúcar</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FEF9EE;">🌮</div>
-              <div class="meal-details">
-                <div class="meal-name">Tacos de papa criolla y frijoles</div>
-                <div class="meal-desc">Tortilla de maíz, frijoles negros, pico de gallo</div>
-                <div class="meal-tags"><span class="mtag v">Vegano</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#FDF0F8;">🍮</div>
-              <div class="meal-details">
-                <div class="meal-name">Flan de panela sin azúcar</div>
-                <div class="meal-desc">Postre especial de cierre de semana</div>
-                <div class="meal-tags"><span class="mtag sf">Sin azúcar</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="tab-content" id="tab-finde">
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Sábado</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FEF9EE;">🥞</div>
-              <div class="meal-details">
-                <div class="meal-name">Brunch: huevos benedictinos andinos</div>
-                <div class="meal-desc">Huevo pochado, pan de yuca, salsa holandesa de aguacate</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF3E8;">🦐</div>
-              <div class="meal-details">
-                <div class="meal-name">Camarones al ajillo con patacones</div>
-                <div class="meal-desc">Camarón del Pacífico, ajo negro, plátano verde</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span><span class="mtag sf">Sin azúcar</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Cena</div></div>
-              <div class="meal-icon-wrap" style="background:#F5EEFF;">🍷</div>
-              <div class="meal-details">
-                <div class="meal-name">Noche de degustación: 5 pasos</div>
-                <div class="meal-desc">Menú especial con maridaje de jugos artesanales</div>
-                <div class="meal-tags"><span class="mtag k">Kosher</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="day-block">
-            <div class="day-label"><span class="day-name">Domingo</span><div class="day-line"></div></div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Desayuno</div></div>
-              <div class="meal-icon-wrap" style="background:#FFFBE8;">🍳</div>
-              <div class="meal-details">
-                <div class="meal-name">Changua criolla con pan artesanal</div>
-                <div class="meal-desc">Leche de coco, huevo, cilantro, pan de maíz GF</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Almuerzo</div></div>
-              <div class="meal-icon-wrap" style="background:#FFF5EE;">🥩</div>
-              <div class="meal-details">
-                <div class="meal-name">Asado familiar estilo Boyacá</div>
-                <div class="meal-desc">Cortes seleccionados, chorizos artesanales, ensaladas</div>
-                <div class="meal-tags"><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-            <div class="meal-row">
-              <div class="meal-time-col"><div class="meal-time">Postre</div></div>
-              <div class="meal-icon-wrap" style="background:#FDF0F8;">🍮</div>
-              <div class="meal-details">
-                <div class="meal-name">Mesa de postres artesanales</div>
-                <div class="meal-desc">Dulce de leche GF, bizcocho de achira, obleas</div>
-                <div class="meal-tags"><span class="mtag sf">Sin azúcar</span><span class="mtag gf">GF</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="share-footer">
-        <div class="share-count-row">
-          <span class="sel-count" id="sel-count">0 platos seleccionados</span>
-          <span style="font-size:10px;color:rgba(139,96,16,0.5);">toca la galería para elegir</span>
-        </div>
-        <button class="share-btn-main" id="share-btn">
-          <i class="ti ti-send"></i>Comparte tu menú con el chef
-        </button>
-      </div>
-
-      <div class="toast" id="toast">¡Menú enviado! El chef te contactará pronto.</div>
-
-    </div>
-
-    <div class="bottom-nav">
-      <div class="nav-i"><i class="ti ti-home"></i><span class="nav-lbl">Inicio</span></div>
-      <div class="nav-i"><i class="ti ti-calendar"></i><span class="nav-lbl">Reservas</span></div>
-      <div class="nav-i active"><i class="ti ti-chef-hat"></i><span class="nav-lbl">Chef</span></div>
-      <div class="nav-i"><i class="ti ti-user"></i><span class="nav-lbl">Perfil</span></div>
-    </div>
-  </div>
-
-</div><!-- /phone -->
-</div><!-- /phone-wrap -->
-
-<script>
-const chefs = [
-  { initials:'MV', bg:'linear-gradient(135deg,#8B4513,#5C2D0A)', name:'Mariana Valdivia', exp:'14 años de experiencia', rating:'4.9 · 87 reseñas', specs:['Cocina andina','Postres sin azúcar','Gluten Free','Vegana','Tradición Boyacá'] },
-  { initials:'CR', bg:'linear-gradient(135deg,#1A5276,#0B3D6B)', name:'Carlos Restrepo', exp:'9 años de experiencia', rating:'4.8 · 64 reseñas', specs:['Tradición Medellín','Cocina Francesa','Vegana','Sin lactosa'] },
-  { initials:'SP', bg:'linear-gradient(135deg,#1E8449,#0E5C2A)', name:'Sofía Pedraza', exp:'18 años de experiencia', rating:'5.0 · 132 reseñas', specs:['Cocina del Pacífico','Mariscos','Kosher','Experiencias'] },
-  { initials:'JM', bg:'linear-gradient(135deg,#7D3C98,#4A1A6B)', name:'Jorge Montoya', exp:'11 años de experiencia', rating:'4.7 · 53 reseñas', specs:['Repostería','Postres GF','Tolima','Sin azúcar'] },
-];
-
-// Splash
-setTimeout(() => document.getElementById('splash-tag').classList.add('show'), 400);
-setTimeout(() => document.getElementById('lid-top').classList.add('open'), 900);
-setTimeout(() => {
-  document.getElementById('splash').classList.add('hide');
-  const hs = document.getElementById('home-screen');
-  hs.classList.add('show');
-}, 2000);
-
-// Menu / dropdown
-const menuBtn = document.getElementById('menu-btn');
-const dropdown = document.getElementById('dropdown');
-menuBtn.addEventListener('click', e => { e.stopPropagation(); dropdown.classList.toggle('open'); });
-document.addEventListener('click', () => dropdown.classList.remove('open'));
-
-// Chips
-document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
-
-// Chef cards → detail
-const detail = document.getElementById('chef-detail');
-document.querySelectorAll('.chef-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const ch = chefs[+card.dataset.chef];
-    document.getElementById('detail-avatar').textContent = ch.initials;
-    document.getElementById('detail-avatar').style.background = ch.bg;
-    document.getElementById('detail-name').textContent = ch.name;
-    document.getElementById('detail-exp').innerHTML = `<i class="ti ti-award" style="font-size:10px;"></i> ${ch.exp}`;
-    document.getElementById('detail-rating').textContent = ch.rating;
-    const specsEl = document.getElementById('detail-specs');
-    specsEl.innerHTML = ch.specs.map(s => `<span class="spec-tag">${s}</span>`).join('');
-    detail.classList.add('show');
-    // reset panels
-    document.getElementById('gallery-panel').classList.remove('open');
-    document.getElementById('add-panel').classList.remove('open');
-    document.getElementById('btn-galeria').innerHTML = '<i class="ti ti-sparkles"></i>Crea tu menú';
-    document.getElementById('btn-adicionales').innerHTML = '<i class="ti ti-plus"></i>Adicionales';
-    document.getElementById('sel-count').textContent = '0 platos seleccionados';
-    document.querySelectorAll('.g-item').forEach(g => g.classList.remove('sel'));
-    selCount = 0;
-  });
-});
-
-// Back
-document.getElementById('back-btn').addEventListener('click', () => detail.classList.remove('show'));
-
-// Tabs
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.getElementById('tab-' + t.dataset.tab).classList.add('active');
-  });
-});
-
-// Gallery toggle
-const galleryPanel = document.getElementById('gallery-panel');
-const addPanel = document.getElementById('add-panel');
-document.getElementById('btn-galeria').addEventListener('click', () => {
-  const open = galleryPanel.classList.contains('open');
-  galleryPanel.classList.toggle('open', !open);
-  addPanel.classList.remove('open');
-  document.getElementById('btn-adicionales').innerHTML = '<i class="ti ti-plus"></i>Adicionales';
-  document.getElementById('btn-galeria').innerHTML = open
-    ? '<i class="ti ti-sparkles"></i>Crea tu menú'
-    : '<i class="ti ti-x"></i>Cerrar galería';
-});
-
-// Adicionales toggle
-document.getElementById('btn-adicionales').addEventListener('click', () => {
-  const open = addPanel.classList.contains('open');
-  addPanel.classList.toggle('open', !open);
-  galleryPanel.classList.remove('open');
-  document.getElementById('btn-galeria').innerHTML = '<i class="ti ti-sparkles"></i>Crea tu menú';
-  document.getElementById('btn-adicionales').innerHTML = open
-    ? '<i class="ti ti-plus"></i>Adicionales'
-    : '<i class="ti ti-x"></i>Cerrar';
-});
-
-// Gallery selection
-let selCount = 0;
-document.querySelectorAll('.g-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const was = item.classList.contains('sel');
-    item.classList.toggle('sel');
-    selCount += was ? -1 : 1;
-    const el = document.getElementById('sel-count');
-    el.textContent = selCount === 0 ? '0 platos seleccionados' : `${selCount} plato${selCount > 1 ? 's' : ''} seleccionado${selCount > 1 ? 's' : ''}`;
-  });
-});
-
-// Share
-document.getElementById('share-btn').addEventListener('click', () => {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-});
-
-// Bottom nav
-document.querySelectorAll('.nav-i').forEach(n => n.addEventListener('click', () => {
-  document.querySelectorAll('.nav-i').forEach(x => x.classList.remove('active'));
-  n.classList.add('active');
-}));
-</script>
 </body>
 </html>
